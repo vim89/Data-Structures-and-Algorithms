@@ -55,42 +55,38 @@ void preOrder(BST *root) {
 	}
 }
 
-int height(BST* node)
-{
-   if (node==NULL)
-       return 0;
-   else
-   {
+int getTreeHeight(BST* node) {
+	if (node==NULL)
+   		return 0;
+   	else {
      /* compute the height of each subtree */
-     int lheight = height(node->left);
-     int rheight = height(node->right);
+   		int lheight = height(node->left);
+     	int rheight = height(node->right);
  
      /* use the larger one */
-     if (lheight > rheight)
-         return(lheight+1);
-     else return(rheight+1);
-   }
+     	if (lheight > rheight)
+     		return(lheight+1);
+     	else 
+     		return(rheight+1);
+ 	}
 }
 
-void printLevelOrder(BST* root)
-{
-  int h = height(root);
-  int i;
-  for(i=1; i<=h; i++)
-    printGivenLevel(root, i);
+void printLevelOrder(BST* root) {
+	int h = getTreeHeight(root);
+	int i;
+	for(i=1; i<=h; i++)
+		printLevel(root, i);
 }     
  
-void printGivenLevel(BST* root, int level)
-{
-  if(root == NULL)
-    return;
-  if(level == 1)
-    printf("%d\t",root->data);
-  else if (level > 1)
-  {
-    printGivenLevel(root->left, level-1);
-    printGivenLevel(root->right, level-1);
-  }
+void printLevel(BST* root, int level) {
+	if(root == NULL)
+		return;
+	if(level == 1)
+		printf("%d\t",root->data);
+	else if (level > 1) {
+		printLevel(root->left, level-1);
+    	printLevel(root->right, level-1);
+    }
 }
 
 int main(int argc, char const *argv[])
