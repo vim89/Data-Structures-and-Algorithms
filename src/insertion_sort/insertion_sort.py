@@ -1,6 +1,6 @@
 # Pseudocode
 # INSERTION-SORT(A)
-    # for j = 2 to length(A)
+    # for j = 1 to length(A)
         # key = A[j]
         # # Insert A[j] into the sorted sequence A[1.. j-1]
         # i = j - 1
