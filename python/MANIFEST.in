@@ -1,0 +1,6 @@
+global-exclude .DS_Store
+include Makefile pyproject.toml README.md .pre-commit-config.yaml .gitignore sonar-project.properties app.py
+recursive-include ccm *
+recursive-include conf *
+recursive-include devops *
+include . app.py main.py

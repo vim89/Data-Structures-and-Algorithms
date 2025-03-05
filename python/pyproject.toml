@@ -1,0 +1,229 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vim-dsa"
+version = "0.1.0"
+readme = "README.md"
+description = "vim Data structures & algorithms"
+authors = [
+    { name = "vim Data structures & algorithms", email = "vitthalmirji@gmail.com" },
+]
+requires-python = ">=3.10"
+keywords = ["framework", "python", "bigdata", "gcp", "pyspark", "spark"]
+dependencies = [
+    "isodate",
+    'importlib-metadata; python_version>="3.10"',
+    "pyjdbc==0.2.2",
+    "mysql-connector-python",
+]
+
+
+[tool.setuptools]
+packages = { find = { exclude = ["tests*", "testing*"] } }
+
+[project.optional-dependencies]
+venv-pkgs = ["isodate"]
+lint = ["ruff", "vulture", "tomli", "isort", "black", "flake8"]
+test = [
+    "pyspark==3.5.2",
+    "pytest",
+    "pytest-cov",
+    "covdefaults",
+    "coverage",
+    "pytest-mock",
+]
+dev = [
+    "pyspark==3.5.2",
+    "setuptools",
+    "mypy",
+    "wheel",
+    "build",
+    "tomli",
+    "commitizen",
+    "pre-commit",
+    "twine",
+    "mkdocs",
+]
+all = ["vim-dsa[venv-pkgs,lint,test,dev]"]
+
+[project.scripts]
+vim-dsa = "vim_dsa.app:main"
+
+[project.urls]
+# Use PyPI-standard names here
+# Homepage
+# Documentation
+# Changelog
+# Issue Tracker
+# Source
+"Homepage" = "https://vitthalmirji.com"
+"Documentation" = "https://vitthalmirji.com"
+
+
+[tool.pytest.ini_options]
+testpaths = "tests" # directory containing your conf
+norecursedirs = [
+    ".idea",
+    ".vscode",
+    "__pycache__",
+    "conf",
+    "devops",
+    "logs",
+    "resources",
+]
+# Warnings that should be ignored
+filterwarnings = ["ignore::DeprecationWarning"]
+# custom markers that can be used pytest.mark
+markers = ["slow: lower-importance tests that take an excessive amount of time"]
+addopts = ["--import-mode=importlib"]
+
+# Configuration for coverage.py
+[tool.coverage.run]
+# files or directories to exclude from coverage calculations
+omit = ['tests', 'testing']
+
+# Maven information
+[tool.maven-metadata]
+group-id = "com.vitthalmirji.dsa"
+artifact-id = "vim-dsa"
+
+# Commitzen for versioning
+[tool.commitizen]
+version_files = ["pyproject.toml:^version"]
+name = "cz_conventional_commits"
+tag_format = "v$version"
+version_scheme = "pep440"
+version_provider = "pep621"
+update_changelog_on_bump = false
+#major_version_zero = true
+
+# Ruff for code formatting & lintng
+[tool.ruff]
+target-version = "py310"
+
+line-length = 100
+indent-width = 4
+src = ["vim_dsa", "tests", "main.py", "app.py"]
+fix = true
+output-format = "grouped"
+
+[tool.ruff.format]
+line-ending = "auto"
+indent-style = "tab"
+docstring-code-format = true
+docstring-code-line-length = 60
+skip-magic-trailing-comma = true
+exclude = ["*.pyi"]
+
+[tool.ruff.lint]
+preview = true
+explicit-preview-rules = true
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+allowed-confusables = ["−", "ρ", "∗"]
+select = [
+    "A",
+    "E",
+    "F",
+    "B",
+    "W",
+    "N",
+    "S",
+    "Q",
+    "PT",
+    "COM",
+    "C4",
+    "TD",
+    "PTH",
+    "T20",
+    "ISC",
+    "EM",
+    "LOG",
+    "BLE",
+    "ARG",
+    "TCH",
+    "SIM",
+    "RET",
+    "UP",
+    "ANN",
+    "ASYNC",
+    "C901",
+] # Various linter codes
+ignore = [
+    "E117",
+    "E111",
+    "E114",
+    "E261",
+    "E265",
+    "E501",
+    "W191",
+    "W505",
+    "ANN101",
+    "ANN102",
+]
+fixable = ["ALL"]
+extend-select = [
+    "SLOT",
+    "PYI",
+    "D419",
+    "D417",
+    "D414",
+    "D407",
+    "D408",
+    "D300",
+    "D211",
+    "D210",
+    "D106",
+    "D105",
+    "D104",
+    "D103",
+    "D102",
+    "D101",
+    "D100",
+]
+extend-safe-fixes = ["E", "F401"]
+logger-objects = [
+    "vim_dsa.utilities.utilities_logger",
+    "vim_dsa.joblauncher.job_logger",
+]
+task-tags = ["TODO", "FIXME", "HACK"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["vim_dsa"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E402", "D104"]
+"**/{devops,tests/resources,testing}/*" = ["E402", "D104"]
+"**/test_*" = [
+    "ARG005",  # we need stub lambdas
+    "S",
+    "SIM300",  # Yoda rocks in asserts
+    "SIM201",  # sometimes we need to check `not ==`
+    "SIM202",  # sometimes we need to check `not ==`
+    "PT005",   # we always add underscores and explicit names
+    "PT011",   # broad is fine
+    "TRY",     # exception best practices don't matter in conf
+    "EM101",   # no need for exception msg hygiene in conf
+    "B904",    # exception best practices don't matter in conf
+    "B015",    # pointless comparison in conf aren't pointless
+    "B018",    # pointless expressions in conf aren't pointless
+    "PLR0124", # pointless comparison in conf aren't pointless
+    "DTZ",     # datetime best practices don't matter in conf
+    "UP037",   # we test some older syntaxes on purpose
+    "B017",    # pytest.raises(Exception) is fine
+    "PT012",   # sometimes we need more than a single stmt
+    "RUF012",  # we don't do ClassVar annotations in conf
+]
+"src/*/*.pyi" = ["ALL"] # TODO
+"tests/test_annotations.py" = ["FA100"]
+"tests/typing_example.py" = [
+    "E741",   # ambiguous variable names don't matter in type checks
+    "B018",   # useless expressions aren't useless in type checks
+    "B015",   # pointless comparison in type checks aren't pointless
+    "TRY301", # exception hygiene isn't important in type checks
+    "UP037",  # we test some older syntaxes on purpose
+]
+
+# lint.flake8-pytest-style TODO: Check Ruff doc starting from this setting till remaining.
